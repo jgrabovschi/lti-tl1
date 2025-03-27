@@ -36,7 +36,7 @@ class LoginController extends Controller
         $client = new Client();
         try
         {
-            $client->get('http://'. $address .'/rest', [
+            $res = $client->get('http://'. $address .'/rest/system/identity', [
                 'auth' =>  [$username, $password ?? ''],
                 'connect_timeout' => 15, //in seconds
                 'http_errors' => true,
@@ -49,33 +49,37 @@ class LoginController extends Controller
             {
                 return back()->withErrors(['global' => 'Invalid credentials'])->withInput();
             }
-            else if ($e->getCode() == 400) {
-                session([
-                    'address' => $request->input('address'),
-                    'username' => $request->input('username'),
-                    'password' => $request->input('password'),
-                ]);
-
-                if (!Profile::where('username', $request->input('username'))
-                    ->where('address', $request->input('address'))
-                    ->exists())
-                {
-                    Profile::create([
-                        'username' => $request->input('username'),
-                        'address' => $request->input('address'),
-                    ]);
-                }
-    
-                return redirect()->route('showInterfaces');
-            }
+            
+            return back()->withErrors(['global' => 'Something went wrong...'])->withInput();
         }
         catch (Exception $e)
         {
             return back()->withErrors(['global' => 'Something went wrong... Check the if the router is on or if the REST API is working.'])->withInput();
         }
 
-        
-        return back()->withErrors(['global' => 'Something went wrong...'])->withInput();
+        $identity = json_decode($res->getBody()->getContents())->name;
+
+        // save the login data in the session
+        session([
+            'address' => $request->input('address'),
+            'username' => $request->input('username'),
+            'password' => $request->input('password'),
+            'identity' => $identity
+        ]);
+
+        // save the login data in the database
+        if (!Profile::where('username', $request->input('username'))
+            ->where('address', $request->input('address'))
+            ->where('identity', $identity)
+            ->exists())
+        {
+            Profile::create([
+                'username' => $request->input('username'),
+                'address' => $request->input('address'),
+                'identity' => $identity
+            ]);
+        }
+        return redirect()->route('showInterfaces');
     }
 
     public function logout()
@@ -83,4 +87,12 @@ class LoginController extends Controller
         session()->flush();
         return redirect()->route('login');
     }
+
+    public function deleteProfile(Profile $profile)
+    {
+        $profile->delete();
+        return redirect()->back();
+    } 
+    
+
 }

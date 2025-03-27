@@ -68,23 +68,37 @@
                 <p class="font-normal mt-4 text-center text-gray-700 dark:text-gray-600">No profiles to show.</p>
             @else
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">Username</th>
                                 <th scope="col" class="px-6 py-3">IP Address</th>
+                                <th scope="col" class="px-6 py-3">Router's Identity</th>
+                                <th scope="col" class="px-6 py-3"></th> 
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($profiles as $profile)
-                                <tr class="odd:bg-white cursor-pointer odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
-                                    onclick="autoFillLoginForm('{{ $profile->username }}', '{{ $profile->address }}')">
-                                    <td class="px-6 py-4">{{ $profile->username }}</td>
-                                    <td class="px-6 py-4">{{ $profile->address }}</td>
-                                </tr>
-                            @endforeach
+                            <tr class="odd:bg-white cursor-pointer odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
+                                onclick="autoFillLoginForm('{{ $profile->username }}', '{{ $profile->address }}')">
+                                <td class="px-6 py-4">{{ $profile->username }}</td>
+                                <td class="px-6 py-4">{{ $profile->address }}</td>
+                                <td class="px-6 py-4">{{ $profile->identity }}</td>
+                                <td class="px-6 py-4">
+                                    <form action="{{ route('profile.delete', $profile->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to forget this login?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="p-1 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach                        
                         </tbody>
                     </table>
+                    
                 </div>
             @endif
         </div>

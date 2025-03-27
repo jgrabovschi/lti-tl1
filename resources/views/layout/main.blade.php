@@ -31,7 +31,7 @@
                 
                 </div>
                 
-                <p class="text-gray-500 dark:text-gray-400">You are logged in as <b class="text-gray-700 dark:text-gray-200">{{ session('username') }}</b> on <b class="text-gray-700 dark:text-gray-200">{{ session('address') }}</b></p>
+                <p class="text-gray-500 dark:text-gray-400">You are logged in as <b class="text-gray-700 dark:text-gray-200">{{ session('username') }}</b> on <b class="text-gray-700 dark:text-gray-200">{{ session('address') }} ({{ session('identity') }})</b></p>
             </div>
             </div>
         </nav>

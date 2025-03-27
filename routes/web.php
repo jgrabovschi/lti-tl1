@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/', [LoginController::class, 'login'])->name('login.submit');
+Route::delete('/profiles/{profile}', [LoginController::class, 'deleteProfile'])->name('profile.delete');
+
 
 Route::middleware(CheckSessionAccess::class)->group(function () {
     // Interfaces
@@ -19,4 +21,7 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
 
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+
 });
