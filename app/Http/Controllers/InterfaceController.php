@@ -19,13 +19,15 @@ class InterfaceController extends Controller
         return view('interfaces.interfaces')->with('data', $res->getBody());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function wireless()
     {
-        //
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/interface/wireless', ['auth' =>  [session('username'), session('password')]]);
+
+        return view('interfaces.wireless')->with('data', $res->getBody());
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -70,13 +72,26 @@ class InterfaceController extends Controller
     public function download()
     {
         $client = new Client();
-        $res = $client->get('http://192.168.88.1/rest/interface', ['auth' =>  ['admin', 'admin']]);
+        $res = $client->get('http://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());
 
         // Return the file as a downloadable response
         return response()->download($tempFilePath, 'interfaces.json')->deleteFileAfterSend(true);
+
+    }
+
+    public function downloadWireless()
+    {
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/interface/wireless', ['auth' =>  [session('username'), session('password')]]);
+
+        $tempFilePath = storage_path('app/temp.json');
+        file_put_contents($tempFilePath, $res->getBody());
+
+        // Return the file as a downloadable response
+        return response()->download($tempFilePath, 'wireless.json')->deleteFileAfterSend(true);
 
     }
 }

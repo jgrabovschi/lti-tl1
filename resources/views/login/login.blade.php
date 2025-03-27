@@ -15,8 +15,8 @@
 </head>
 <body class="font-sans antialiased">
 
-<div class="bg-slate-200 dark:bg-slate-500 overflow-y-auto">
-    <div class="flex justify-center items-center min-h-screen">
+<div class="bg-slate-200 dark:bg-slate-500 overflow-y-auto p-4">
+    <div class="flex-col sm:flex-row flex  justify-center items-center min-h-screen">
 
         <!-- Left: Login Form -->
         <div class="m-4 w-full md:w-1/2 lg:w-1/3 p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">

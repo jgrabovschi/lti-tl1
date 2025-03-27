@@ -5,12 +5,12 @@
 <div class="flex justify-center">
     <div class="block p-6  w-md bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700">
     
-        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Interfaces Information</h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">Here you can see the info about the interfaces on this router.</p>
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Wireless Interfaces Information</h5>
+        <p class="font-normal text-gray-700 dark:text-gray-400">Here you can see the info about the wireless interfaces on this router.</p>
     
     </div>
 </div>
-<form method="POST" action="{{ route('downloadInterfaces') }}">
+<form method="POST" action="{{ route('downloadWireless') }}">
     @csrf
     <button type="sumbit" class="mt-4 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
         Download JSON
@@ -20,33 +20,19 @@
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3">
-                    ID
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    MAC Address
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Type
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    MTU
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Running
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Rx Bytes
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Ty Bytes
-                </th>
-                {{-- <th scope="col" class="px-6 py-3">
-                    Action
-                </th> --}}
+                <th scope="col" class="px-6 py-3">ID</th>
+                <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3">MAC Address</th>
+                <th scope="col" class="px-6 py-3">Type</th>
+                <th scope="col" class="px-6 py-3">MTU</th>
+                <th scope="col" class="px-6 py-3">Running</th>
+                <th scope="col" class="px-6 py-3">Rx Chains</th>
+                <th scope="col" class="px-6 py-3">Tx Chains</th>
+                <th scope="col" class="px-6 py-3">SSID</th>
+                <th scope="col" class="px-6 py-3">Security Profile</th>
+                <th scope="col" class="px-6 py-3">Frequency</th>
+                <th scope="col" class="px-6 py-3">Rate Set</th>
+                <th scope="col" class="px-6 py-3">Tx Power Mode</th>
             </tr>
         </thead>
         <tbody>
@@ -62,7 +48,7 @@
                     {{ $interface->{'mac-address'} ?? 'N/A' }}
                 </td>
                 <td class="px-6 py-4">
-                    {{ $interface->{'type'} }}
+                    {{ $interface->{'interface-type'} }}
                 </td>
                 <td class="px-6 py-4">
                     {{ $interface->{'mtu'} }}
@@ -73,18 +59,31 @@
                     </span>
                 </td>
                 <td class="px-6 py-4">
-                    {{ $interface->{'rx-byte'} }}
+                    {{ $interface->{'rx-chains'} }}
                 </td>
                 <td class="px-6 py-4">
-                    {{ $interface->{'tx-byte'} }}
+                    {{ $interface->{'tx-chains'} }}
                 </td>
-                {{-- <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td> --}}
+                <td class="px-6 py-4">
+                    {{ $interface->{'ssid'} }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ $interface->{'security-profile'} }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ $interface->{'frequency'} }} MHz
+                </td>
+                <td class="px-6 py-4">
+                    {{ $interface->{'rate-set'} }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ $interface->{'tx-power-mode'} }}
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+    
 </div>
 
 
