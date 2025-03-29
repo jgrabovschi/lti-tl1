@@ -27,6 +27,40 @@ class InterfaceController extends Controller
 
         return view('interfaces.wireless')->with('data', $res->getBody());
     }
+
+    public function bridge()
+    {
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
+
+        return view('interfaces.bridges')->with('data', $res->getBody());
+    }
+
+    public function storeBridge(Request $request)
+    {
+
+        $request->validate([
+            'name' => 'required|string',
+            'arp' => 'required|in:disabled,enabled,local-proxy-arp,proxy-arp,replay-only',
+        ]);
+
+        $name= $request->input('name');
+        $arp = $request->input('arp');
+
+        $client = new Client();
+        $res = $client->put('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')],
+                            'json' => ['name' => $name, 'arp' => $arp]]);
+
+        //return view('interfaces.bridges')->with('data', $res->getBody());
+        return redirect()->route('showInterfacesBridge')->with('success', 'Data saved successfully!');
+    }
+
+    public function createBridge()
+    {
+        
+
+        return view('interfaces.createBridge');
+    }
     
 
     /**
@@ -53,6 +87,14 @@ class InterfaceController extends Controller
         //
     }
 
+    public function editBridge(string $id)
+    {
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')]]);
+
+        return view('interfaces.editBridge')->with('data', $res->getBody());
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -67,6 +109,13 @@ class InterfaceController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function destroyBridge(string $id)
+    {
+        $client = new Client();
+        $res = $client->delete('http://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')]]);
+
+        return redirect()->route('showInterfacesBridge')->with('success', 'Data deleted successfully!');
     }
 
     public function download()
@@ -92,6 +141,19 @@ class InterfaceController extends Controller
 
         // Return the file as a downloadable response
         return response()->download($tempFilePath, 'wireless.json')->deleteFileAfterSend(true);
+
+    }
+
+    public function downloadBridge()
+    {
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
+
+        $tempFilePath = storage_path('app/temp.json');
+        file_put_contents($tempFilePath, $res->getBody());
+
+        // Return the file as a downloadable response
+        return response()->download($tempFilePath, 'bridge.json')->deleteFileAfterSend(true);
 
     }
 }

@@ -18,6 +18,13 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::post('/interfaces', [InterfaceController::class, 'download'])->name('downloadInterfaces');
     Route::get('/interfaces/wireless', [InterfaceController::class, 'wireless'])->name('showInterfacesWireless');
     Route::post('/interfaces/wireless', [InterfaceController::class, 'downloadWireless'])->name('downloadWireless');
+    Route::get('/interfaces/bridge', [InterfaceController::class, 'bridge'])->name('showInterfacesBridge');
+    Route::post('/interfaces/bridge', [InterfaceController::class, 'downloadBridge'])->name('downloadBridge');
+    Route::delete('/interfaces/bridge/{id}', [InterfaceController::class, 'destroyBridge'])->name('destroyBridge');
+    Route::get('/interfaces/bridge/{id}', [InterfaceController::class, 'editBridge'])->name('editBridge');
+    Route::put('/interfaces/create/bridge', [InterfaceController::class, 'storeBridge'])->name('storeBridge');
+    Route::get('/interfaces/create/bridge', [InterfaceController::class, 'createBridge'])->name('createBridge');
+    
 
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
