@@ -92,7 +92,28 @@ class InterfaceController extends Controller
         $client = new Client();
         $res = $client->get('http://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
-        return view('interfaces.editBridge')->with('data', $res->getBody());
+        $resInt = $client->get('http://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
+
+        $resPort = $client->get('http://' . session('address') . '/rest/interface/bridge/port', ['auth' =>  [session('username'), session('password')]]);
+
+        // interface dá a interface que é(ehter1,ether2,etc) e bridge dá a bridge que pertcence 
+        //json_decode($data)->name
+        $bridge = json_decode($res->getBody());
+        $interfaces = json_decode($resInt->getBody());
+        $ports = json_decode($resPort->getBody());
+        foreach($interfaces as $interface){
+            foreach($ports as $port){
+                if($port->interface == $interface->name){
+                    $interface->bridge = $port->bridge;
+                    $interface->bridgeId = $port->{'.id'};
+                }
+            }
+            if(!property_exists($interface,'bridge')){
+                $interface->bridge = '';
+            }
+        }
+
+        return view('interfaces.editBridge')->with('data', $res->getBody())->with('id', $id)->with('interfaces' , $interfaces);
     }
 
     /**
@@ -101,6 +122,43 @@ class InterfaceController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    public function updateBridge(Request $request, string $id)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'arp' => 'required|in:disabled,enabled,local-proxy-arp,proxy-arp,replay-only',
+        ]);
+
+        $name= $request->input('name');
+        $arp = $request->input('arp');
+
+        $client = new Client();
+        $res = $client->patch('http://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')],
+                            'json' => [ ".id"=> $id, 'name' => $name, 'arp' => $arp]]);
+
+        //return view('interfaces.bridges')->with('data', $res->getBody());
+        return redirect()->route('showInterfacesBridge')->with('success', 'Data updated successfully!');
+    }
+
+    public function addPortBridge(Request $request)
+    {
+        $request->validate([
+            'interface' => 'required|string',
+            'bridge' => 'required|string',
+        ]);
+
+        $interface= $request->input('interface');
+        $idBridged = $request->input('bridge');
+
+        $client = new Client();
+        $res = $client->put('http://' . session('address') . '/rest/interface/bridge/port', ['auth' =>  [session('username'), session('password')],
+                            'json' => ['interface' => $interface, 'bridge' => $idBridged]]);
+        
+
+        //return view('interfaces.bridges')->with('data', $res->getBody());
+        return redirect()->route('editBridge', ['id' => $idBridged])->with('success', 'Data updated successfully!');
     }
 
     /**
@@ -116,6 +174,16 @@ class InterfaceController extends Controller
         $res = $client->delete('http://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
         return redirect()->route('showInterfacesBridge')->with('success', 'Data deleted successfully!');
+    }
+
+    public function destroyPortBridge(string $id)
+    {
+        $client = new Client();
+        $res = $client->delete('http://' . session('address') . '/rest/interface/bridge/port/' . $id, ['auth' =>  [session('username'), session('password')]]);
+
+        return redirect()->route('showInterfacesBridge')->with('success', 'Data deleted successfully!');
+        //tenho fazer o redirect para interfacebridge
+        //return redirect()->route('showInterfacesBridge', ['id' => $interface])->with('success', 'Data updated successfully!');
     }
 
     public function download()

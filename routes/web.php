@@ -20,10 +20,13 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::post('/interfaces/wireless', [InterfaceController::class, 'downloadWireless'])->name('downloadWireless');
     Route::get('/interfaces/bridge', [InterfaceController::class, 'bridge'])->name('showInterfacesBridge');
     Route::post('/interfaces/bridge', [InterfaceController::class, 'downloadBridge'])->name('downloadBridge');
+    Route::patch('/interfaces/bridge/{id}', [InterfaceController::class, 'updateBridge'])->name('updateBridge');
     Route::delete('/interfaces/bridge/{id}', [InterfaceController::class, 'destroyBridge'])->name('destroyBridge');
     Route::get('/interfaces/bridge/{id}', [InterfaceController::class, 'editBridge'])->name('editBridge');
     Route::put('/interfaces/create/bridge', [InterfaceController::class, 'storeBridge'])->name('storeBridge');
     Route::get('/interfaces/create/bridge', [InterfaceController::class, 'createBridge'])->name('createBridge');
+    Route::put('/interfaces/bridge/port', [InterfaceController::class, 'addPortBridge'])->name('addPortBridge');
+    Route::delete('/interfaces/bridge/port/{id}', [InterfaceController::class, 'destroyPortBridge'])->name('destroyPortBridge');
     
 
 
