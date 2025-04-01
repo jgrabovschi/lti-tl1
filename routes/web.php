@@ -38,6 +38,7 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::get('/routes/create', [StaticController::class, 'createStatic'])->name('createStatic');
     Route::get('/routes/{id}', [StaticController::class, 'editStatic'])->name('editStatic');
     Route::delete('/routes/{id}', [StaticController::class, 'destroyStatic'])->name('destroyStatic');
+    Route::patch('/routes/{id}', [StaticController::class, 'updateStatic'])->name('updateStatic');
     
     
 
