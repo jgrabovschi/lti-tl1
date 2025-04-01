@@ -22,6 +22,7 @@
             <tr>
                 <th scope="col" class="px-6 py-3">ID</th>
                 <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3">Enabled</th>
                 <th scope="col" class="px-6 py-3">MAC Address</th>
                 <th scope="col" class="px-6 py-3">Type</th>
                 <th scope="col" class="px-6 py-3">MTU</th>
@@ -33,6 +34,8 @@
                 <th scope="col" class="px-6 py-3">Frequency</th>
                 <th scope="col" class="px-6 py-3">Rate Set</th>
                 <th scope="col" class="px-6 py-3">Tx Power Mode</th>
+                <th scope="col" class="px-6 py-3">Action</th>
+                <th scope="col" class="px-6 py-3"></th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +46,11 @@
                 </th>
                 <td class="px-6 py-4">
                     {{ $interface->name }}
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 text-xs font-semibold {{ $interface->disabled == 'false' ? 'text-green-700 bg-green-200' : 'text-red-700 bg-red-200' }} rounded">
+                        {{ $interface->disabled == 'true' ? 'No' : 'Yes' }}
+                    </span>
                 </td>
                 <td class="px-6 py-4">
                     {{ $interface->{'mac-address'} ?? 'N/A' }}
@@ -78,6 +86,34 @@
                 </td>
                 <td class="px-6 py-4">
                     {{ $interface->{'tx-power-mode'} }}
+                </td>
+                <td class="px-6 py-4">
+                    @if ($interface->disabled == 'true')
+                    <form method="POST" action="{{ route('enableWireless', $interface->{'.id'}) }}">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
+                            Enable Network
+                        </button>
+                    </form>
+                    @else
+                    <form method="POST" action="{{ route('disableWireless', $interface->{'.id'}) }}">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
+                            Disable Network
+                        </button>
+                    </form>
+                    @endif
+                </td>
+                <td class="px-6 py-4">
+                    <form method="GET" action="{{ route('configWireless', ['id' => $interface->{'.id'}]) }}">
+                        
+                        <button type="submit" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800">
+                            Configure
+                        </button>
+
+                    </form>
                 </td>
             </tr>
             @endforeach

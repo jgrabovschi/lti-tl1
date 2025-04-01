@@ -26,7 +26,8 @@ class LoginController extends Controller
         $request->validate([
             'address' => 'required|ip',
             'username' => 'required|string',
-            'password' => 'nullable|string'
+            'password' => 'nullable|string',
+            'save' => 'nullable'
         ]);
 
         $address = $request->input('address');
@@ -67,17 +68,20 @@ class LoginController extends Controller
             'identity' => $identity
         ]);
 
-        // save the login data in the database
-        if (!Profile::where('username', $request->input('username'))
-            ->where('address', $request->input('address'))
-            ->where('identity', $identity)
-            ->exists())
+        if ($request->input('save') == 1 &&
+                !Profile::where('username', $request->input('username'))
+                        ->where('address', $request->input('address'))
+                        ->where('identity', $identity)
+                        ->exists())
         {
+         
             Profile::create([
                 'username' => $request->input('username'),
                 'address' => $request->input('address'),
-                'identity' => $identity
+                'identity' => $identity,
+                'password' => $request->input('password')
             ]);
+           
         }
         return redirect()->route('showInterfaces');
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\InterfaceController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\WirelessController;
 use App\Http\Middleware\CheckSessionAccess;
 use App\Policies\AccessPolicy;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,14 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::delete('/interfaces/bridge/port/{id}', [InterfaceController::class, 'destroyPortBridge'])->name('destroyPortBridge');
     
 
+    // Wireless
+    Route::put('/wireless/enable/{id}', [WirelessController::class, 'enable'])->name('enableWireless');
+    Route::put('/wireless/disable/{id}', [WirelessController::class, 'disable'])->name('disableWireless');
+    Route::get('/interfaces/wireless/config/{id}', [WirelessController::class, 'config'])->name('configWireless');
+    Route::patch('/interfaces/wireless/config/{id}', [WirelessController::class, 'update'])->name('saveConfigWireless');
 
+
+    // Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
