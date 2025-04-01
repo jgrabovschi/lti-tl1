@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\InterfaceController;
+use App\Http\Controllers\StaticController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\WirelessController;
 use App\Http\Middleware\CheckSessionAccess;
@@ -28,6 +29,16 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::get('/interfaces/create/bridge', [InterfaceController::class, 'createBridge'])->name('createBridge');
     Route::put('/interfaces/bridge/port', [InterfaceController::class, 'addPortBridge'])->name('addPortBridge');
     Route::delete('/interfaces/bridge/port/{id}', [InterfaceController::class, 'destroyPortBridge'])->name('destroyPortBridge');
+
+
+    //ROutes Statics
+    Route::get('/routes', [StaticController::class, 'index'])->name('showStatics');
+    Route::post('/routes/download', [StaticController::class, 'downloadStatic'])->name('downloadStatic');
+    Route::put('/routes/create', [StaticController::class, 'storeStatic'])->name('storeStatic');
+    Route::get('/routes/create', [StaticController::class, 'createStatic'])->name('createStatic');
+    Route::get('/routes/{id}', [StaticController::class, 'editStatic'])->name('editStatic');
+    Route::delete('/routes/{id}', [StaticController::class, 'destroyStatic'])->name('destroyStatic');
+    
     
 
     // Wireless
