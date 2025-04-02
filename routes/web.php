@@ -4,6 +4,7 @@ use App\Http\Controllers\InterfaceController;
 use App\Http\Controllers\StaticController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\WirelessController;
+use App\Http\Controllers\AddressController;
 use App\Http\Middleware\CheckSessionAccess;
 use App\Policies\AccessPolicy;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,16 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::put('/wireless/disable/{id}', [WirelessController::class, 'disable'])->name('disableWireless');
     Route::get('/interfaces/wireless/config/{id}', [WirelessController::class, 'config'])->name('configWireless');
     Route::patch('/interfaces/wireless/config/{id}', [WirelessController::class, 'update'])->name('saveConfigWireless');
+
+
+    // IP Address
+    Route::get('/address', [AddressController::class, 'index'])->name('showAddress');
+    Route::post('/address/download', [AddressController::class, 'downloadAddress'])->name('downloadAddress');
+    Route::get('/address/create', [AddressController::class, 'createAddress'])->name('createAddress');
+    Route::put('/address/create', [AddressController::class, 'storeAddress'])->name('storeAddress');
+    Route::delete('/address/{id}', [AddressController::class, 'destroyAddress'])->name('destroyAddress');
+    Route::get('/address/{id}', [AddressController::class, 'editAddress'])->name('editAddress');
+    Route::patch('/address/{id}', [AddressController::class, 'updateAddress'])->name('updateAddress');
 
 
     // Logout

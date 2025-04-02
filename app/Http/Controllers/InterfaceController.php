@@ -176,14 +176,19 @@ class InterfaceController extends Controller
         return redirect()->route('showInterfacesBridge')->with('success', 'Data deleted successfully!');
     }
 
-    public function destroyPortBridge(string $id)
+    public function destroyPortBridge(Request $request, string $id)
     {
         $client = new Client();
         $res = $client->delete('http://' . session('address') . '/rest/interface/bridge/port/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
-        return redirect()->route('showInterfacesBridge')->with('success', 'Data deleted successfully!');
+        //return redirect()->route('showInterfacesBridge')->with('success', 'Data deleted successfully!');
         //tenho fazer o redirect para interfacebridge
         //return redirect()->route('showInterfacesBridge', ['id' => $interface])->with('success', 'Data updated successfully!');
+        //este bridge vem como request 
+        $request->validate([
+            'bridge' => 'required|string',
+        ]);
+        return redirect()->route('editBridge', ['id' => $request->bridge])->with('success', 'Data deleted successfully!');
     }
 
     public function download()
