@@ -4,6 +4,7 @@ use App\Http\Controllers\InterfaceController;
 use App\Http\Controllers\StaticController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\WirelessController;
+use App\Http\Controllers\DnsController;
 use App\Http\Controllers\AddressController;
 use App\Http\Middleware\CheckSessionAccess;
 use App\Policies\AccessPolicy;
@@ -59,6 +60,19 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::get('/address/{id}', [AddressController::class, 'editAddress'])->name('editAddress');
     Route::patch('/address/{id}', [AddressController::class, 'updateAddress'])->name('updateAddress');
 
+
+
+    // DNS
+    Route::get('/dns', [DnsController::class, 'index'])->name('showDns');
+    Route::post('/dns/download', [DnsController::class, 'downloadDns'])->name('downloadDns');
+    Route::get('/dns/add', [DnsController::class, 'AddServersDns'])->name('AddServersDns');
+    Route::post('/dns/add', [DnsController::class, 'addServersRDns'])->name('addServersRDns');
+    Route::get('/dns/remove', [DnsController::class, 'removeServerDns'])->name('removeServerDns');
+    Route::post('/dns/remove', [DnsController::class, 'removeServerRDns'])->name('removeServerRDns');
+    //Route::put('/dns/create', [DnsController::class, 'storeDns'])->name('storeDns');
+    Route::post('/dns/toggle', [DnsController::class, 'toggleDns'])->name('toggleDns');
+    Route::get('/dns/edit', [DnsController::class, 'editDns'])->name('editDns');
+    Route::patch('/dns/update', [DnsController::class, 'updateDns'])->name('updateDns');
 
     // Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
