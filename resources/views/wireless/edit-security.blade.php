@@ -30,11 +30,11 @@
         <div class="ms-3 text-sm font-normal">{{ $message }}</div>
     </div>
     @enderror
-    <form method="POST" class="max-w-sm mx-auto" action="{{ route('storeSecurity') }}">
+    <form method="POST" class="max-w-sm mx-auto" action="{{ route('updateSecurity', ['id' => $data->{'.id'}]) }}">
         @csrf
-        @method('PUT')
+        @method('PATCH')
         <div class="mb-5">
-            <input type="hidden" name="id" id="id" value="{{ $data->{'authentication-types'} }}" />
+            <input type="hidden" name="authentication-types" id="authentication-types" value="{{ $data->{'authentication-types'} }}" />
             <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password {{ $data->{'authentication-types'} }}</label>
             <input type="text" name="password" id="password" value="{{ old('password', $data->{'authentication-types'} == "wpa-psk" ? $data->{'wpa-pre-shared-key'} : $data->{'wpa2-pre-shared-key'}) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
             @error('password')

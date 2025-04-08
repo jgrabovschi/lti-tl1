@@ -97,7 +97,7 @@ class WirelessController extends Controller
         return view('wireless.security-profile')->with('data', $res->getBody());
     }
 
-   
+    //downloads the security profiles
     public function downloadSecurity()
     {
         $client = new Client();
@@ -115,11 +115,14 @@ class WirelessController extends Controller
     }
 
 
+    //shows the form
     public function createSecurity()
     {
         return view('wireless.new-security');
     }
 
+
+    //creates a new security profile
     public function storeSecurity(Request $request)
     {
         $request->validate([
@@ -147,6 +150,7 @@ class WirelessController extends Controller
         return redirect()->route('showSecurityProfiles');
     }
 
+    //shows the form
     public function editSecurity(string $id)
     {
         $client = new Client();
@@ -157,9 +161,12 @@ class WirelessController extends Controller
         return view('wireless.edit-security')->with('data', json_decode($res->getBody()));
     }
 
+
+    //updates the password for the security profile
     public function updateSecurity(Request $request, string $id)
     {
         $request->validate([
+            'authentication-types' => 'required|string',
             'password' => 'required|string|min:8',
         ]);
         $client = new Client();
@@ -169,9 +176,8 @@ class WirelessController extends Controller
             [
                 'auth' =>  [session('username'), session('password')],
                 'json' => [
-                    'name' => $request->input('name'),
-                    'wpa2-pre-shared-key' => $request->input('password'),
-                    'authentication-types' => 'wpa2-psk',
+                    $request->input('authentication-types') == 'wpa-psk' ? 'wpa-pre-shared-key' : 'wpa2-pre-shared-key' => $request->input('password'),
+                    'authentication-types' => $request->input('authentication-types'),
                 ],
             ]);
 
@@ -179,6 +185,18 @@ class WirelessController extends Controller
             return back()->withErrors(['global' => $e->getMessage()])->withInput();
         }
 
+        return redirect()->route('showSecurityProfiles');
+    }
+
+
+    //deletes security profile
+    public function deleteSecurity(string $id)
+    {
+        $client = new Client();
+        $client->delete('http://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
+        [
+            'auth' =>  [session('username'), session('password')],
+        ]);
         return redirect()->route('showSecurityProfiles');
     }
 
