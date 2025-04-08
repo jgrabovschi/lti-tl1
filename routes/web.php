@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\WirelessController;
 use App\Http\Controllers\DnsController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\DhcpController;
 use App\Http\Middleware\CheckSessionAccess;
 use App\Policies\AccessPolicy;
 use Illuminate\Support\Facades\Route;
@@ -72,7 +73,25 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     //Route::put('/dns/create', [DnsController::class, 'storeDns'])->name('storeDns');
     Route::post('/dns/toggle', [DnsController::class, 'toggleDns'])->name('toggleDns');
     Route::get('/dns/edit', [DnsController::class, 'editDns'])->name('editDns');
-    Route::patch('/dns/update', [DnsController::class, 'updateDns'])->name('updateDns');
+    Route::get('/dns/static', [DnsController::class, 'showDnsStatic'])->name('showDnsStatic');
+    Route::get('/dns/static/{id}', [DnsController::class, 'editDnsStatic'])->name('editDnsStatic');
+    Route::post('/dns/static/{id}', [DnsController::class, 'toggleDnsStatic'])->name('toggleDnsStatic');
+    Route::get('/dns/create/static', [DnsController::class, 'createDnsStatic'])->name('createDnsStatic');
+    Route::put('/dns/create/static', [DnsController::class, 'storeDnsStatic'])->name('storeDnsStatic');
+    Route::patch('/dns/static/{id}', [DnsController::class, 'updateDnsStatic'])->name('updateDnsStatic');
+    Route::post('/dns/static/{id}', [DnsController::class, 'toggleDnsStatic'])->name('toggleDnsStatic');
+    Route::delete('/dns/static/{id}', [DnsController::class, 'destroyDnsStatic'])->name('destroyDnsStatic');
+    Route::post('/dns/download/static', [DnsController::class, 'downloadDnsStatic'])->name('downloadDnsStatic');
+
+
+    // DHCP
+    Route::get('/dhcp/pool', [DhcpController::class, 'indexPool'])->name('showDhcpPool');
+    Route::post('/dhcp/pool/download', [DhcpController::class, 'downloadDhcpPool'])->name('downloadDhcpPool');
+    Route::get('/dhcp/create/pool', [DhcpController::class, 'createDhcpPool'])->name('createDhcpPool');
+    Route::put('/dhcp/create/pool', [DhcpController::class, 'storeDhcpPool'])->name('storeDhcpPool');
+    Route::get('/dhcp/pool/{id}', [DhcpController::class, 'editDhcpPool'])->name('editDhcpPool');
+    Route::delete('/dhcp/pool/{id}', [DhcpController::class, 'destroyDhcpPool'])->name('destroyDhcpPool');
+    Route::patch('/dhcp/pool/{id}', [DhcpController::class, 'updateDhcpPool'])->name('updateDhcpPool');
 
     // Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');

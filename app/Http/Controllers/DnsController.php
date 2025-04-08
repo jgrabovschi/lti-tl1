@@ -30,6 +30,27 @@ class DnsController extends Controller
 
     }
 
+    public function showDnsStatic(): View
+    {
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')]]);
+
+        return view('dns.showStatic')->with('data', json_decode($res->getBody()));
+    }
+
+    public function downloadDnsStatic()
+    {
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')]]);
+
+        $tempFilePath = storage_path('app/temp.json');
+        file_put_contents($tempFilePath, $res->getBody());
+
+        // Return the file as a downloadable response
+        return response()->download($tempFilePath, 'DNSStatic.json')->deleteFileAfterSend(true);
+
+    }
+
     public function AddServersDns(Request $request)
     {
         $request->validate([
@@ -113,31 +134,60 @@ class DnsController extends Controller
         return redirect()->route('showDns')->with('success', 'Dns updated successfully!');
     }
 
-    public function storeDns(Request $request)
+    public function editDnsStatic(string $id)
     {
-        
+        $client = new Client();
+
+        $res = $client->get('http://' . session('address') . '/rest/ip/dns/static/' . $id, ['auth' =>  [session('username'), session('password')]]);
+
+        $res = json_decode($res->getBody());
+
+        return view('dns.editDnsStatic')->with('DnsStatic', $res);
+    }
+
+    public function createDnsStatic()
+    {
+        return view('dns.createDnsStatic');
+    }
+
+    public function storeDnsStatic(Request $request)
+    {
+
         $request->validate([
-            'address' => [
-                'required',
-                'regex:/^(\d{1,3}\.){3}\d{1,3}(\/\d{1,2})?$/'
-            ],
-            'network' => [
-                'required',
-                'ip',
-            ],
-            'interface' => ['required','string'],
+            'name' => ['required','string'],
+            'address' => ['required','ip'],
         ]);
-        
+
+        $name = $request->input('name');
         $address = $request->input('address');
-        $network = $request->input('network');
-        $interface = $request->input('interface');
 
         $client = new Client();
-        $res = $client->put('http://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')],
-                            'json' => ['address' => $address, 'network' => $network, 'interface' => $interface ]]);
 
-        //return view('interfaces.bridges')->with('data', $res->getBody());
-        return redirect()->route('showAddress')->with('success', 'Data saved successfully!');
+        $res = $client->put('http://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')],
+                            'json' => ['address' => $address, 'name' => $name ]]);
+
+        $res = json_decode($res->getBody());
+        return redirect()->route('showDnsStatic')->with('success', 'Dns updated successfully!');
+    }
+
+    public function updateDnsStatic(Request $request, string $id)
+    {
+
+        $request->validate([
+            'name' => ['required','string'],
+            'address' => ['required','ip'],
+        ]);
+
+        $name = $request->input('name');
+        $address = $request->input('address');
+
+        $client = new Client();
+
+        $res = $client->patch('http://' . session('address') . '/rest/ip/dns/static/' . $id, ['auth' =>  [session('username'), session('password')],
+                            'json' => ['address' => $address, 'name' => $name ]]);
+
+        $res = json_decode($res->getBody());
+        return redirect()->route('showDnsStatic')->with('success', 'Dns updated successfully!');
     }
 
     public function toggleDns(Request $request)
@@ -158,45 +208,30 @@ class DnsController extends Controller
         return redirect()->route('showDns')->with('success', 'Data toggled successfully!');
     }
 
-    public function editDns(string $id)
+    public function toggleDnsStatic(Request $request, string $id)
     {
         $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/address/' . $id, ['auth' =>  [session('username'), session('password')]]);
-        $resBridge = $client->get('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
-        return view('addresses.editAddress')->with('data', json_decode($res->getBody()))->with('id', $id)->with('bridges', json_decode($resBridge->getBody()));
-    }
-
-    public function updateDns(Request $request, string $id)
-    {
         $request->validate([
-            'address' => [
+            'toggle' => [
                 'required',
-                'regex:/^(\d{1,3}\.){3}\d{1,3}(\/\d{1,2})?$/'
+                'string'
             ],
-            'network' => [
-                'required',
-                'ip',
-            ],
-            'interface' => ['required','string'],
         ]);
-        
 
-        $address = $request->input('address');
-        $network = $request->input('network');
-        $interface = $request->input('interface');
+        $toggle = $request->input('toggle');
         
-        
-        $client = new Client();
-        $res = $client->patch('http://' . session('address') . '/rest/ip/address/'. $id, ['auth' =>  [session('username'), session('password')],
-                        'json' => ['address' => $address, 'network' => $network, 'interface' => $interface  ]]);
-        
-        return redirect()->route('showAddress')->with('success', 'Data updated successfully!');
-        
-        /*$client = new Client();
-        $res = $client->patch('http://' . session('address') . '/rest/ip/address/'. $id, ['auth' =>  [session('username'), session('password')],
-                            'json' => ['address' => $address, 'network' => $network ]]);*/
+        $res = $client->patch('http://' . session('address') . '/rest/ip/dns/static/' .$id, ['auth' =>  [session('username'), session('password')],
+                        'json' => ['disabled' => $toggle ]]);
 
-        //return view('interfaces.bridges')->with('data', $res->getBody());
-        //return redirect()->route('showAddress')->with('success', 'Data updated successfully!');
+        return redirect()->route('showDnsStatic')->with('success', 'Data updated successfully!');
     }
+
+    public function destroyDnsStatic(string $id)
+    {
+        $client = new Client();
+        $res = $client->delete('http://' . session('address') . '/rest/ip/dns/static/' .$id, ['auth' =>  [session('username'), session('password')]]);
+
+        return redirect()->route('showDnsStatic')->with('success', 'Data deleted successfully!');
+    }
+
 }
