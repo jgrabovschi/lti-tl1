@@ -18,8 +18,18 @@
 
 </form>
 
-<div class="mx-auto w-full md:w-1/2 lg:w-1/3 p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-
+<div class="w-full md:w-1/2 lg:w-1/3 p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+    @error('global')
+    <div id="toast-danger" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg dark:text-gray-400 dark:bg-gray-800" role="alert">
+        <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
+            </svg>
+            <span class="sr-only">Error icon</span>
+        </div>
+        <div class="ms-3 text-sm font-normal">{{ $message }}</div>
+    </div>
+    @enderror
     <form method="POST" class="max-w-sm mx-auto">
         @csrf
         @method('PATCH')
@@ -37,6 +47,36 @@
                 @foreach ($securityProfiles as $securityProfile)
                     <option {{ $securityProfile->name == $wlan->{'security-profile'} ? 'selected' : ''}} value="{{ $securityProfile->name }}">{{ $securityProfile->name }}</option>
                 @endforeach              
+            </select>
+        </div>
+        <div class="mb-5">
+            <label for="band" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a band</label>
+            <select name="band" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                @foreach ($bands as $band)
+                <option {{ $band == $wlan->{'band'} ? 'selected' : ''}} value="{{ $band }}">
+                    {{ $band }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-5">
+            <label for="mode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a mode</label>
+            <select name="mode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                @foreach ($modes as $mode)
+                <option {{ $mode == $wlan->{'mode'} ? 'selected' : ''}} value="{{ $mode }}">
+                    {{ $mode }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-5">
+            <label for="frequency" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a mode</label>
+            <select name="frequency" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                @foreach ($frequencies as $frequency)
+                <option {{ $frequency == $wlan->{'frequency'} ? 'selected' : ''}} value="{{ $frequency }}">
+                    {{ $frequency }}
+                </option>
+                @endforeach
             </select>
         </div>
         {{-- <div class="mb-5">
