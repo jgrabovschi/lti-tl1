@@ -74,6 +74,18 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::get('/dns/edit', [DnsController::class, 'editDns'])->name('editDns');
     Route::patch('/dns/update', [DnsController::class, 'updateDns'])->name('updateDns');
 
+
+    // Security Profiles
+    Route::get('/security', [WirelessController::class, 'showSecurityProfiles'])->name('showSecurityProfiles');
+    Route::post('/security/download', [WirelessController::class, 'downloadSecurity'])->name('downloadSecurity');
+    Route::get('/security/create', [WirelessController::class, 'createSecurity'])->name('createSecurity');
+    Route::put('/security/create', [WirelessController::class, 'storeSecurity'])->name('storeSecurity');
+    Route::get('/security/{id}', [WirelessController::class, 'editSecurity'])->name('editSecurity');
+    Route::patch('/security/{id}', [WirelessController::class, 'updateSecurity'])->name('updateSecurity');
+    Route::delete('/security/{id}', [WirelessController::class, 'deleteSecurity'])->name('deleteSecurity');
+
+
+
     // Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 

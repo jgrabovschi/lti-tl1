@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Exception;
+use Symfony\Component\Console\Command\DumpCompletionCommand;
 
 class WirelessController extends Controller
 {
@@ -85,20 +86,100 @@ class WirelessController extends Controller
             ->with('frequencies', $frequencies);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+    public function showSecurityProfiles()
     {
-        //
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/interface/wireless/security-profiles', 
+        [
+            'auth' =>  [session('username'), session('password')],
+        ]);
+        return view('wireless.security-profile')->with('data', $res->getBody());
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+   
+    public function downloadSecurity()
     {
-        //
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/interface/wireless/security-profiles', 
+        [
+            'auth' =>  [session('username'), session('password')],
+        ]);
+
+        $tempFilePath = storage_path('app/temp.json');
+        file_put_contents($tempFilePath, $res->getBody());
+
+        // Return the file as a downloadable response
+        return response()->download($tempFilePath, 'security-profiles.json')->deleteFileAfterSend(true);
+       
+    }
+
+
+    public function createSecurity()
+    {
+        return view('wireless.new-security');
+    }
+
+    public function storeSecurity(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'password' => 'required|string|min:8',
+        ]);
+        $client = new Client();
+        try{
+            
+            $client->put('http://' . session('address') . '/rest/interface/wireless/security-profiles', 
+            [
+                'auth' =>  [session('username'), session('password')],
+                'json' => [
+                    'name' => $request->input('name'),
+                    'wpa2-pre-shared-key' => $request->input('password'),
+                    'mode' => 'dynamic-key',
+                    'authentication-types' => 'wpa2-psk',
+                ],
+            ]);
+
+        } catch( RequestException $e) {
+            return back()->withErrors(['global' => $e->getMessage()])->withInput();
+        }
+
+        return redirect()->route('showSecurityProfiles');
+    }
+
+    public function editSecurity(string $id)
+    {
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
+        [
+            'auth' =>  [session('username'), session('password')],
+        ]);
+        return view('wireless.edit-security')->with('data', json_decode($res->getBody()));
+    }
+
+    public function updateSecurity(Request $request, string $id)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8',
+        ]);
+        $client = new Client();
+        try{
+            
+            $client->patch('http://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
+            [
+                'auth' =>  [session('username'), session('password')],
+                'json' => [
+                    'name' => $request->input('name'),
+                    'wpa2-pre-shared-key' => $request->input('password'),
+                    'authentication-types' => 'wpa2-psk',
+                ],
+            ]);
+
+        } catch( RequestException $e) {
+            return back()->withErrors(['global' => $e->getMessage()])->withInput();
+        }
+
+        return redirect()->route('showSecurityProfiles');
     }
 
     /**
