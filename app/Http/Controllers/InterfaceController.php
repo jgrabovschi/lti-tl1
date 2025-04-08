@@ -57,8 +57,6 @@ class InterfaceController extends Controller
 
     public function createBridge()
     {
-        
-
         return view('interfaces.createBridge');
     }
     
@@ -153,8 +151,9 @@ class InterfaceController extends Controller
         $idBridged = $request->input('bridge');
 
         $client = new Client();
-        $res = $client->put('http://' . session('address') . '/rest/interface/bridge/port', ['auth' =>  [session('username'), session('password')],
-                            'json' => ['interface' => $interface, 'bridge' => $idBridged]]);
+        $res = $client->put('http://' . session('address') . '/rest/interface/bridge/port',
+                ['auth' =>  [session('username'), session('password')],
+                'json' => ['interface' => $interface, 'bridge' => $idBridged]]);
         
 
         //return view('interfaces.bridges')->with('data', $res->getBody());

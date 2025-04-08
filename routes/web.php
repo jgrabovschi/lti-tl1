@@ -93,6 +93,18 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::delete('/dhcp/pool/{id}', [DhcpController::class, 'destroyDhcpPool'])->name('destroyDhcpPool');
     Route::patch('/dhcp/pool/{id}', [DhcpController::class, 'updateDhcpPool'])->name('updateDhcpPool');
 
+
+    // Security Profiles
+    Route::get('/security', [WirelessController::class, 'showSecurityProfiles'])->name('showSecurityProfiles');
+    Route::post('/security/download', [WirelessController::class, 'downloadSecurity'])->name('downloadSecurity');
+    Route::get('/security/create', [WirelessController::class, 'createSecurity'])->name('createSecurity');
+    Route::put('/security/create', [WirelessController::class, 'storeSecurity'])->name('storeSecurity');
+    Route::get('/security/{id}', [WirelessController::class, 'editSecurity'])->name('editSecurity');
+    Route::patch('/security/{id}', [WirelessController::class, 'updateSecurity'])->name('updateSecurity');
+    Route::delete('/security/{id}', [WirelessController::class, 'deleteSecurity'])->name('deleteSecurity');
+
+
+
     // Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
