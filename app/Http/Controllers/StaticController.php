@@ -10,16 +10,20 @@ class StaticController extends Controller
 {
     public function index(): View
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/route', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/route', ['auth' =>  [session('username'), session('password')]]);
 
         return view('statics.statics')->with('data', $res->getBody());
     }
 
     public function downloadStatic()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/route', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/route', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());
@@ -53,8 +57,10 @@ class StaticController extends Controller
         $dst = $request->input('dst-address');
         $gateway = $request->input('gateway');
 
-        $client = new Client();
-        $res = $client->put('http://' . session('address') . '/rest/ip/route', ['auth' =>  [session('username'), session('password')],
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->put('https://' . session('address') . '/rest/ip/route', ['auth' =>  [session('username'), session('password')],
                             'json' => ['dst-address' => $dst, 'gateway' => $gateway]]);
 
         //return view('interfaces.bridges')->with('data', $res->getBody());
@@ -69,8 +75,10 @@ class StaticController extends Controller
 
     public function editStatic(string $id)
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/route/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/route/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
         return view('statics.editStatic')->with('data', $res->getBody())->with('id', $id);
     }
@@ -98,8 +106,10 @@ class StaticController extends Controller
         $dst = $request->input('dst-address');
         $gateway = $request->input('gateway');
 
-        $client = new Client();
-        $res = $client->put('http://' . session('address') . '/rest/ip/route/'. $id, ['auth' =>  [session('username'), session('password')],
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->put('https://' . session('address') . '/rest/ip/route/'. $id, ['auth' =>  [session('username'), session('password')],
                             'json' => ['dst-address' => $dst, 'gateway' => $gateway]]);
 
         //return view('interfaces.bridges')->with('data', $res->getBody());
@@ -108,8 +118,10 @@ class StaticController extends Controller
 
     public function destroyStatic(string $id)
     {
-        $client = new Client();
-        $res = $client->delete('http://' . session('address') . '/rest/ip/route/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->delete('https://' . session('address') . '/rest/ip/route/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
         return redirect()->route('showStatics')->with('success', 'Data deleted successfully!');
     }

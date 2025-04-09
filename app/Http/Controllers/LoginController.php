@@ -34,10 +34,13 @@ class LoginController extends Controller
         $username = $request->input('username');
         $password = $request->input('password');
 
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
+        
         try
         {
-            $res = $client->get('http://'. $address .'/rest/system/identity', [
+            $res = $client->get('https://'. $address .'/rest/system/identity', [
                 'auth' =>  [$username, $password ?? ''],
                 'connect_timeout' => 15, //in seconds
                 'http_errors' => true,
@@ -51,7 +54,7 @@ class LoginController extends Controller
                 return back()->withErrors(['global' => 'Invalid credentials'])->withInput();
             }
             
-            return back()->withErrors(['global' => 'Something went wrong...'])->withInput();
+            return back()->withErrors(['global' => $e->getMessage()])->withInput();
         }
         catch (Exception $e)
         {

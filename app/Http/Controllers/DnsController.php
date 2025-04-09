@@ -11,16 +11,20 @@ class DnsController extends Controller
 {
     public function index(): View
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')]]);
 
         return view('dns.index')->with('data', json_decode($res->getBody()));
     }
 
     public function downloadDns()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());
@@ -32,16 +36,20 @@ class DnsController extends Controller
 
     public function showDnsStatic(): View
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')]]);
 
         return view('dns.showStatic')->with('data', json_decode($res->getBody()));
     }
 
     public function downloadDnsStatic()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());
@@ -76,26 +84,30 @@ class DnsController extends Controller
             
         }
         $servers = rtrim($servers, ', ');
-        $validated = $request->validate($rules);
+        $request->validate($rules);
 
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $resServers = $client->get('http://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')]]);
+        $resServers = $client->get('https://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')]]);
 
         $resServers = json_decode($resServers->getBody());
 
         $servers .= ',' . $resServers->{'servers'};
 
-        $res = $client->post('http://' . session('address') . '/rest/ip/dns/set', ['auth' =>  [session('username'), session('password')],
+        $client->post('https://' . session('address') . '/rest/ip/dns/set', ['auth' =>  [session('username'), session('password')],
                         'json' => ['servers' => $servers ]]);
         return redirect()->route('showDns')->with('success', 'Dns updated successfully!');
     }
 
-    public function removeServerDns(Request $request)
+    public function removeServerDns()
     {
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $resServers = $client->get('http://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')]]);
+        $resServers = $client->get('https://' . session('address') . '/rest/ip/dns', ['auth' =>  [session('username'), session('password')]]);
 
         $resServers = json_decode($resServers->getBody());
 
@@ -125,9 +137,11 @@ class DnsController extends Controller
         }
         
         
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $res = $client->post('http://' . session('address') . '/rest/ip/dns/set', ['auth' =>  [session('username'), session('password')],
+        $res = $client->post('https://' . session('address') . '/rest/ip/dns/set', ['auth' =>  [session('username'), session('password')],
                         'json' => ['servers' => $serverString ]]);
 
 
@@ -136,9 +150,11 @@ class DnsController extends Controller
 
     public function editDnsStatic(string $id)
     {
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $res = $client->get('http://' . session('address') . '/rest/ip/dns/static/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/dns/static/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
         $res = json_decode($res->getBody());
 
@@ -161,9 +177,11 @@ class DnsController extends Controller
         $name = $request->input('name');
         $address = $request->input('address');
 
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $res = $client->put('http://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')],
+        $res = $client->put('https://' . session('address') . '/rest/ip/dns/static', ['auth' =>  [session('username'), session('password')],
                             'json' => ['address' => $address, 'name' => $name ]]);
 
         $res = json_decode($res->getBody());
@@ -181,9 +199,11 @@ class DnsController extends Controller
         $name = $request->input('name');
         $address = $request->input('address');
 
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $res = $client->patch('http://' . session('address') . '/rest/ip/dns/static/' . $id, ['auth' =>  [session('username'), session('password')],
+        $res = $client->patch('https://' . session('address') . '/rest/ip/dns/static/' . $id, ['auth' =>  [session('username'), session('password')],
                             'json' => ['address' => $address, 'name' => $name ]]);
 
         $res = json_decode($res->getBody());
@@ -192,7 +212,9 @@ class DnsController extends Controller
 
     public function toggleDns(Request $request)
     {
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
         $request->validate([
             'toggle' => [
                 'required',
@@ -202,7 +224,7 @@ class DnsController extends Controller
 
         $toggle = $request->input('toggle');
         
-        $res = $client->post('http://' . session('address') . '/rest/ip/dns/set', ['auth' =>  [session('username'), session('password')],
+        $client->post('https://' . session('address') . '/rest/ip/dns/set', ['auth' =>  [session('username'), session('password')],
                         'json' => ['allow-remote-requests' => $toggle ]]);
 
         return redirect()->route('showDns')->with('success', 'Data toggled successfully!');
@@ -210,7 +232,9 @@ class DnsController extends Controller
 
     public function toggleDnsStatic(Request $request, string $id)
     {
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
         $request->validate([
             'toggle' => [
                 'required',
@@ -220,7 +244,7 @@ class DnsController extends Controller
 
         $toggle = $request->input('toggle');
         
-        $res = $client->patch('http://' . session('address') . '/rest/ip/dns/static/' .$id, ['auth' =>  [session('username'), session('password')],
+        $res = $client->patch('https://' . session('address') . '/rest/ip/dns/static/' .$id, ['auth' =>  [session('username'), session('password')],
                         'json' => ['disabled' => $toggle ]]);
 
         return redirect()->route('showDnsStatic')->with('success', 'Data updated successfully!');
@@ -228,8 +252,10 @@ class DnsController extends Controller
 
     public function destroyDnsStatic(string $id)
     {
-        $client = new Client();
-        $res = $client->delete('http://' . session('address') . '/rest/ip/dns/static/' .$id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->delete('https://' . session('address') . '/rest/ip/dns/static/' .$id, ['auth' =>  [session('username'), session('password')]]);
 
         return redirect()->route('showDnsStatic')->with('success', 'Data deleted successfully!');
     }

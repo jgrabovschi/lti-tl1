@@ -13,8 +13,10 @@ class InterfaceController extends Controller
      */
     public function index(): View
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
 
         return view('interfaces.interfaces')->with('data', $res->getBody());
     }
@@ -22,16 +24,20 @@ class InterfaceController extends Controller
 
     public function wireless()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/wireless', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/wireless', ['auth' =>  [session('username'), session('password')]]);
 
         return view('interfaces.wireless')->with('data', $res->getBody());
     }
 
     public function bridge()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
 
         return view('interfaces.bridges')->with('data', $res->getBody());
     }
@@ -47,8 +53,10 @@ class InterfaceController extends Controller
         $name= $request->input('name');
         $arp = $request->input('arp');
 
-        $client = new Client();
-        $res = $client->put('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')],
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->put('https://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')],
                             'json' => ['name' => $name, 'arp' => $arp]]);
 
         //return view('interfaces.bridges')->with('data', $res->getBody());
@@ -87,16 +95,17 @@ class InterfaceController extends Controller
 
     public function editBridge(string $id)
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
-        $resInt = $client->get('http://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
+        $resInt = $client->get('https://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
 
-        $resPort = $client->get('http://' . session('address') . '/rest/interface/bridge/port', ['auth' =>  [session('username'), session('password')]]);
+        $resPort = $client->get('https://' . session('address') . '/rest/interface/bridge/port', ['auth' =>  [session('username'), session('password')]]);
 
         // interface dá a interface que é(ehter1,ether2,etc) e bridge dá a bridge que pertcence 
         //json_decode($data)->name
-        $bridge = json_decode($res->getBody());
         $interfaces = json_decode($resInt->getBody());
         $ports = json_decode($resPort->getBody());
         foreach($interfaces as $interface){
@@ -132,8 +141,10 @@ class InterfaceController extends Controller
         $name= $request->input('name');
         $arp = $request->input('arp');
 
-        $client = new Client();
-        $res = $client->patch('http://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')],
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->patch('https://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')],
                             'json' => [ ".id"=> $id, 'name' => $name, 'arp' => $arp]]);
 
         //return view('interfaces.bridges')->with('data', $res->getBody());
@@ -150,8 +161,10 @@ class InterfaceController extends Controller
         $interface= $request->input('interface');
         $idBridged = $request->input('bridge');
 
-        $client = new Client();
-        $res = $client->put('http://' . session('address') . '/rest/interface/bridge/port',
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->put('https://' . session('address') . '/rest/interface/bridge/port',
                 ['auth' =>  [session('username'), session('password')],
                 'json' => ['interface' => $interface, 'bridge' => $idBridged]]);
         
@@ -169,16 +182,20 @@ class InterfaceController extends Controller
     }
     public function destroyBridge(string $id)
     {
-        $client = new Client();
-        $res = $client->delete('http://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->delete('https://' . session('address') . '/rest/interface/bridge/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
         return redirect()->route('showInterfacesBridge')->with('success', 'Data deleted successfully!');
     }
 
     public function destroyPortBridge(Request $request, string $id)
     {
-        $client = new Client();
-        $res = $client->delete('http://' . session('address') . '/rest/interface/bridge/port/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->delete('https://' . session('address') . '/rest/interface/bridge/port/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
         //return redirect()->route('showInterfacesBridge')->with('success', 'Data deleted successfully!');
         //tenho fazer o redirect para interfacebridge
@@ -192,8 +209,10 @@ class InterfaceController extends Controller
 
     public function download()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());
@@ -205,8 +224,10 @@ class InterfaceController extends Controller
 
     public function downloadWireless()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/wireless', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/wireless', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());
@@ -218,8 +239,10 @@ class InterfaceController extends Controller
 
     public function downloadBridge()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());

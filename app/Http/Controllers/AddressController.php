@@ -10,16 +10,20 @@ class AddressController extends Controller
 {
     public function index(): View
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/address', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/address', ['auth' =>  [session('username'), session('password')]]);
 
         return view('addresses.index')->with('data', $res->getBody());
     }
 
     public function downloadAddress()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/address', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/address', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());
@@ -31,8 +35,10 @@ class AddressController extends Controller
 
     public function createAddress()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
         
         return view('addresses.createAddress')->with('bridges', json_decode($res->getBody()));
     }
@@ -56,8 +62,10 @@ class AddressController extends Controller
         $network = $request->input('network');
         $interface = $request->input('interface');
 
-        $client = new Client();
-        $res = $client->put('http://' . session('address') . '/rest/ip/address', ['auth' =>  [session('username'), session('password')],
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->put('https://' . session('address') . '/rest/ip/address', ['auth' =>  [session('username'), session('password')],
                             'json' => ['address' => $address, 'network' => $network, 'interface' => $interface ]]);
 
         //return view('interfaces.bridges')->with('data', $res->getBody());
@@ -66,16 +74,20 @@ class AddressController extends Controller
 
     public function destroyAddress(string $id)
     {
-        $client = new Client();
-        $res = $client->delete('http://' . session('address') . '/rest/ip/address/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->delete('https://' . session('address') . '/rest/ip/address/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
         return redirect()->route('showAddress')->with('success', 'Data deleted successfully!');
     }
 
     public function editAddress(string $id)
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/address/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/address/' . $id, ['auth' =>  [session('username'), session('password')]]);
         $resBridge = $client->get('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
         return view('addresses.editAddress')->with('data', json_decode($res->getBody()))->with('id', $id)->with('bridges', json_decode($resBridge->getBody()));
     }
@@ -100,8 +112,10 @@ class AddressController extends Controller
         $interface = $request->input('interface');
         
         
-        $client = new Client();
-        $res = $client->patch('http://' . session('address') . '/rest/ip/address/'. $id, ['auth' =>  [session('username'), session('password')],
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->patch('https://' . session('address') . '/rest/ip/address/'. $id, ['auth' =>  [session('username'), session('password')],
                         'json' => ['address' => $address, 'network' => $network, 'interface' => $interface  ]]);
         
         return redirect()->route('showAddress')->with('success', 'Data updated successfully!');

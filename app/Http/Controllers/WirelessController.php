@@ -15,8 +15,10 @@ class WirelessController extends Controller
      */
     public function enable(string $id)
     {
-        $client = new Client();
-        $client->post('http://' . session('address') . '/rest/interface/wireless/enable',
+        $client = new Client([
+            'verify' => false
+        ]);
+        $client->post('https://' . session('address') . '/rest/interface/wireless/enable',
              ['auth' =>  [session('username'), session('password')],
              'json' => ['.id' => $id]],
             );
@@ -29,8 +31,10 @@ class WirelessController extends Controller
      */
     public function disable(string $id)
     {
-        $client = new Client();
-        $client->post('http://' . session('address') . '/rest/interface/wireless/disable', 
+        $client = new Client([
+            'verify' => false
+        ]);
+        $client->post('https://' . session('address') . '/rest/interface/wireless/disable', 
         [
             'auth' =>  [session('username'), session('password')],
             'json' => ['.id' => $id],
@@ -44,13 +48,15 @@ class WirelessController extends Controller
      */
     public function config(string $id)
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/wireless/' . $id, 
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/wireless/' . $id, 
         [
             'auth' =>  [session('username'), session('password')],
         ]);
         
-        $res2 = $client->get('http://' . session('address') . '/rest/interface/wireless/security-profiles', 
+        $res2 = $client->get('https://' . session('address') . '/rest/interface/wireless/security-profiles', 
         [
             'auth' =>  [session('username'), session('password')],
         ]);
@@ -89,8 +95,10 @@ class WirelessController extends Controller
 
     public function showSecurityProfiles()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/wireless/security-profiles', 
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/wireless/security-profiles', 
         [
             'auth' =>  [session('username'), session('password')],
         ]);
@@ -100,8 +108,10 @@ class WirelessController extends Controller
     //downloads the security profiles
     public function downloadSecurity()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/wireless/security-profiles', 
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/wireless/security-profiles', 
         [
             'auth' =>  [session('username'), session('password')],
         ]);
@@ -129,10 +139,12 @@ class WirelessController extends Controller
             'name' => 'required|string',
             'password' => 'required|string|min:8',
         ]);
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
         try{
             
-            $client->put('http://' . session('address') . '/rest/interface/wireless/security-profiles', 
+            $client->put('https://' . session('address') . '/rest/interface/wireless/security-profiles', 
             [
                 'auth' =>  [session('username'), session('password')],
                 'json' => [
@@ -153,8 +165,10 @@ class WirelessController extends Controller
     //shows the form
     public function editSecurity(string $id)
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
         [
             'auth' =>  [session('username'), session('password')],
         ]);
@@ -169,10 +183,12 @@ class WirelessController extends Controller
             'authentication-types' => 'required|string',
             'password' => 'required|string|min:8',
         ]);
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
         try{
             
-            $client->patch('http://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
+            $client->patch('https://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
             [
                 'auth' =>  [session('username'), session('password')],
                 'json' => [
@@ -192,8 +208,10 @@ class WirelessController extends Controller
     //deletes security profile
     public function deleteSecurity(string $id)
     {
-        $client = new Client();
-        $client->delete('http://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
+        $client = new Client([
+            'verify' => false
+        ]);
+        $client->delete('https://' . session('address') . '/rest/interface/wireless/security-profiles/' . $id, 
         [
             'auth' =>  [session('username'), session('password')],
         ]);
@@ -213,10 +231,12 @@ class WirelessController extends Controller
             'mode' => 'required|string',
             'frequency' => 'required|string',
         ]);
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
         try{
             
-            $client->patch('http://' . session('address') . '/rest/interface/wireless/' . $id, 
+            $client->patch('https://' . session('address') . '/rest/interface/wireless/' . $id, 
             [
                 'auth' =>  [session('username'), session('password')],
                 'json' => [
