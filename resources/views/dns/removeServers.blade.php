@@ -17,30 +17,41 @@
     </button>
 </form>
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-    <form method="POST" action="{{ route('removeServerRDns') }}" class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-        @csrf
-        
-        @foreach($servers as $index => $server)
-        <div class="flex items-center mb-2">
-                <input 
-                    type="checkbox" 
-                    id="server_{{ $index + 1 }}" 
-                    name="servers[]" 
-                    value="{{ $server }}" 
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                    checked
-                >
-                <label for="server_{{ $index + 1 }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                    {{ $server }}
-                </label>
+<div class="relative overflow-x-auto mt-6">
+    <div class="max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
+            Unselect the IPs you want to remove from the servers
+        </h2>
+
+        <form method="POST" action="{{ route('removeServerRDns') }}">
+            @csrf
+
+            <div class="space-y-3 mb-6">
+                @foreach($servers as $index => $server)
+                    <div class="flex items-center">
+                        <input 
+                            type="checkbox" 
+                            id="server_{{ $index + 1 }}" 
+                            name="servers[]" 
+                            value="{{ $server }}" 
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                            checked
+                        >
+                        <label for="server_{{ $index + 1 }}" class="ml-3 text-sm text-gray-700 dark:text-gray-300">
+                            {{ $server }}
+                        </label>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
-            Submit
-        </button>
-        
-    </form>
+
+            <button 
+                type="submit" 
+                class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800 transition-colors duration-200"
+            >
+                Submit
+            </button>
+        </form>
+    </div>
 </div>
 
 

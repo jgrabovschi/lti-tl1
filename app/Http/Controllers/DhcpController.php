@@ -9,6 +9,15 @@ use Illuminate\Support\Str;
 
 class DhcpController extends Controller
 {
+
+    public function index(): View
+    {
+        $client = new Client();
+        $res = $client->get('http://' . session('address') . '/rest/ip/dhcp-server', ['auth' =>  [session('username'), session('password')]]);
+
+        return view('dhcp.index')->with('data', json_decode($res->getBody()));
+    }
+
     public function indexPool(): View
     {
         $client = new Client();

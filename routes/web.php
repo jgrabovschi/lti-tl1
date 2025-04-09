@@ -92,6 +92,13 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::get('/dhcp/pool/{id}', [DhcpController::class, 'editDhcpPool'])->name('editDhcpPool');
     Route::delete('/dhcp/pool/{id}', [DhcpController::class, 'destroyDhcpPool'])->name('destroyDhcpPool');
     Route::patch('/dhcp/pool/{id}', [DhcpController::class, 'updateDhcpPool'])->name('updateDhcpPool');
+    Route::get('/dhcp', [DhcpController::class, 'index'])->name('showDhcp');
+    Route::post('/dhcp/download', [DhcpController::class, 'downloadDhcp'])->name('downloadDhcp');
+    Route::get('/dhcp/create', [DhcpController::class, 'createDhcp'])->name('createDhcp');
+    Route::put('/dhcp/create', [DhcpController::class, 'storeDhcp'])->name('storeDhcp');
+    Route::get('/dhcp/edit/{id}', [DhcpController::class, 'editDhcp'])->name('editDhcp');
+    Route::delete('/dhcp/delete/{id}', [DhcpController::class, 'destroyDhcp'])->name('destroyDhcp');
+    Route::patch('/dhcp/edit/{id}', [DhcpController::class, 'updateDhcp'])->name('updateDhcp');
 
 
     // Security Profiles
