@@ -20,16 +20,20 @@ class DhcpController extends Controller
 
     public function indexPool(): View
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/pool', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/pool', ['auth' =>  [session('username'), session('password')]]);
 
         return view('dhcp.indexPool')->with('data', json_decode($res->getBody()));
     }
 
     public function downloadDhcpPool()
     {
-        $client = new Client();
-        $res = $client->get('http://' . session('address') . '/rest/ip/pool', ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/pool', ['auth' =>  [session('username'), session('password')]]);
 
         $tempFilePath = storage_path('app/temp.json');
         file_put_contents($tempFilePath, $res->getBody());
@@ -47,9 +51,11 @@ class DhcpController extends Controller
 
     public function editDhcpPool(string $id)
     {
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $res = $client->get('http://' . session('address') . '/rest/ip/pool/' . $id, ['auth' =>  [session('username'), session('password')]]);
+        $res = $client->get('https://' . session('address') . '/rest/ip/pool/' . $id, ['auth' =>  [session('username'), session('password')]]);
 
         $res = json_decode($res->getBody());
 
@@ -71,9 +77,11 @@ class DhcpController extends Controller
         $name = $request->input('name');
         $ranges = $request->input('rangeBegin') . '-' . $request->input("rangeEnd");
 
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $res = $client->put('http://' . session('address') . '/rest/ip/pool', ['auth' =>  [session('username'), session('password')],
+        $res = $client->put('https://' . session('address') . '/rest/ip/pool', ['auth' =>  [session('username'), session('password')],
                             'json' => ['name' => $name, 'ranges' => $ranges ]]);
 
         return redirect()->route('showDhcpPool')->with('success', 'DHCP updated successfully!');
@@ -92,9 +100,11 @@ class DhcpController extends Controller
         $name = $request->input('name');
         $ranges = $request->input('rangeBegin') . '-' . $request->input("rangeEnd");
 
-        $client = new Client();
+        $client = new Client([
+            'verify' => false
+        ]);
 
-        $res = $client->put('http://' . session('address') . '/rest/ip/pool/' .$id, ['auth' =>  [session('username'), session('password')],
+        $res = $client->put('https://' . session('address') . '/rest/ip/pool/' .$id, ['auth' =>  [session('username'), session('password')],
                             'json' => ['name' => $name, 'ranges' => $ranges ]]);
 
         return redirect()->route('showDhcpPool')->with('success', 'DHCP updated successfully!');
@@ -103,8 +113,10 @@ class DhcpController extends Controller
 
     public function destroyDhcpPool(string $id)
     {
-        $client = new Client();
-        $res = $client->delete('http://' . session('address') . '/rest/ip/pool/' .$id, ['auth' =>  [session('username'), session('password')]]);
+        $client = new Client([
+            'verify' => false
+        ]);
+        $res = $client->delete('https://' . session('address') . '/rest/ip/pool/' .$id, ['auth' =>  [session('username'), session('password')]]);
 
         return redirect()->route('showDnsStatic')->with('success', 'Data deleted successfully!');
     }
