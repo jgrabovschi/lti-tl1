@@ -7,6 +7,7 @@ use App\Http\Controllers\WirelessController;
 use App\Http\Controllers\DnsController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DhcpController;
+use App\Http\Controllers\WireguardController;
 use App\Http\Middleware\CheckSessionAccess;
 use App\Policies\AccessPolicy;
 use Illuminate\Support\Facades\Route;
@@ -111,6 +112,15 @@ Route::middleware(CheckSessionAccess::class)->group(function () {
     Route::delete('/security/{id}', [WirelessController::class, 'deleteSecurity'])->name('deleteSecurity');
 
 
+    // wireguard
+    Route::get('/wireguard', [WireguardController::class, 'showInterfaces'])->name('showInterfacesWireguard');
+    Route::post('/wireguard', [WireguardController::class, 'downloadInterfaces'])->name('downloadInterfacesWireguard');
+    Route::get('/wireguard/peers', [WireguardController::class, 'showPeers'])->name('showWireguardPeers');
+    Route::post('/wireguard/peers', [WireguardController::class, 'downloadPeers'])->name('downloadPeersWireguard');
+    Route::get('/wireguard/peers/create', [WireguardController::class, 'createPeer'])->name('createPeerWireguard');
+    Route::delete('/wireguard/peers/{id}', [WireguardController::class, 'destroyPeer'])->name('deletePeerWireguard');
+    Route::put('/wireguard/peers/create', [WireguardController::class, 'storePeer'])->name('storePeerWireguard');
+    Route::get('/wireguard/peers/qr/{id}', [WireguardController::class, 'showQrCode'])->name('showQrCode');
 
     // Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
