@@ -104,7 +104,8 @@ class WireguardController extends Controller
                     'private-key' => $request->{'private-key'},
                     'interface' => $request->interface,
                     'client-dns' => $request->{'client-dns'},
-                    'client-endpoint' => $request->{'client-endpoint'}
+                    'client-endpoint' => $request->{'client-endpoint'},
+                    'client-address' => $request->{'allowed-address'},
                 ],
             ]);
         }
