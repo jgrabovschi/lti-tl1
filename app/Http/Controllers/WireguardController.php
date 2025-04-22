@@ -132,7 +132,8 @@ class WireguardController extends Controller
         
         $qr = QrCode::size(300)->generate($peer[0]->conf);
 
-        return view('wireguard.qr')->with('qr', $qr)
+        return view('wireguard.qr')
+            ->with('qr', $qr)
             ->with('peer', $peer);
     }
 }
