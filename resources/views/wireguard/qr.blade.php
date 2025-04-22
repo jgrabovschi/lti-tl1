@@ -18,9 +18,9 @@
     <div class="w-min p-6 bg-white border border-gray-200 rounded-lg shadow-s m-4">
         {!! $qr !!}
     </div>
-    <div class="w-full max-w-lg m-4">
+    <div class="w-full max-w-xl m-4">
         <div class="relative bg-gray-50 rounded-lg dark:bg-gray-700 p-4 h-88">
-            <div class="overflow-scroll max-h-full">
+            <div class="max-h-full">
                 <pre>
                     <code id="code-block" class="text-sm text-gray-900 dark:text-white">
                         {{ $peer[0]->conf }}
