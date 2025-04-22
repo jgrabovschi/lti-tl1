@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class StaticController extends Controller
 {
@@ -60,8 +61,15 @@ class StaticController extends Controller
         $client = new Client([
             'verify' => false
         ]);
-        $res = $client->put('https://' . session('address') . '/rest/ip/route', ['auth' =>  [session('username'), session('password')],
+
+        try{
+
+            $res = $client->put('https://' . session('address') . '/rest/ip/route', ['auth' =>  [session('username'), session('password')],
                             'json' => ['dst-address' => $dst, 'gateway' => $gateway]]);
+                            
+        } catch( RequestException $e) {
+            return back()->withErrors(['global' => $e->getMessage()])->withInput();
+        }
 
         //return view('interfaces.bridges')->with('data', $res->getBody());
         return redirect()->route('showStatics')->with('success', 'Data saved successfully!');
@@ -109,8 +117,16 @@ class StaticController extends Controller
         $client = new Client([
             'verify' => false
         ]);
-        $res = $client->put('https://' . session('address') . '/rest/ip/route/'. $id, ['auth' =>  [session('username'), session('password')],
+
+        try{
+
+            $res = $client->put('https://' . session('address') . '/rest/ip/route/'. $id, ['auth' =>  [session('username'), session('password')],
                             'json' => ['dst-address' => $dst, 'gateway' => $gateway]]);
+                            
+        } catch( RequestException $e) {
+            return back()->withErrors(['global' => $e->getMessage()])->withInput();
+        }
+        
 
         //return view('interfaces.bridges')->with('data', $res->getBody());
         return redirect()->route('showStatics')->with('success', 'Data updated successfully!');
