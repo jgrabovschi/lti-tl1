@@ -33,7 +33,6 @@
                 <option value="enabled">Enabled</option>
                 <option value="local-proxy-arp">Local Proxy ARP</option>
                 <option value="proxy-arp">Proxy ARP</option>
-                <option value="replay-only">Replay Only</option>
             </select>
         </div>
         

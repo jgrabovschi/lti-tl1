@@ -33,7 +33,6 @@
                 <option value="enabled" {{ old('arp', json_decode($data)->arp) == 'enabled' ? 'selected' : '' }}>Enabled</option>
                 <option value="local-proxy-arp" {{old('arp', json_decode($data)->arp) == 'local-proxy-arp' ? 'selected' : '' }} >Local Proxy ARP</option>
                 <option value="proxy-arp" {{old('arp', json_decode($data)->arp) == 'proxy-arp' ? 'selected' : '' }}>Proxy ARP</option>
-                <option value="replay-only" {{old('arp', json_decode($data)->arp) == 'replay-only' ? 'selected' : '' }} >Replay Only</option>
             </select>
         </div>
         
