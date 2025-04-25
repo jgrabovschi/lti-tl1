@@ -5,8 +5,8 @@
 <div class="flex justify-center">
     <div class="block p-6  w-md bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700">
     
-        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">IP Addresses Information</h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">Edit your IP Address</p>
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">DHCP Information</h5>
+        <p class="font-normal text-gray-700 dark:text-gray-400">Edit your DHCP Pool</p>
     
     </div>
 </div>
