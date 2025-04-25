@@ -5,8 +5,8 @@
 <div class="flex justify-center">
     <div class="block p-6  w-md bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700">
     
-        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">DNS Information</h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">Here you can see the info about the DNS on this router.</p>
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">DHCP Pool Information</h5>
+        <p class="font-normal text-gray-700 dark:text-gray-400">Here you can see the info about the DHCP Pool on this router.</p>
     
     </div>
 </div>
