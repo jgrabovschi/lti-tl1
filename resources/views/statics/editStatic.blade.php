@@ -6,7 +6,7 @@
     <div class="block p-6  w-md bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700">
     
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Static Routes Information</h5>
-    <p class="font-normal text-gray-700 dark:text-gray-400">Create your Route Static</p>
+    <p class="font-normal text-gray-700 dark:text-gray-400">Edit your Route Static</p>
     
     </div>
 </div>
