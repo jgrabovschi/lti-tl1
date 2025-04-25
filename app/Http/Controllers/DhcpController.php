@@ -245,7 +245,7 @@ class DhcpController extends Controller
             'verify' => false
         ]);
 
-        $res = $client->put('https://' . session('address') . '/rest/ip/pool/' .$id, ['auth' =>  [session('username'), session('password')],
+        $res = $client->patch('https://' . session('address') . '/rest/ip/pool/' .$id, ['auth' =>  [session('username'), session('password')],
                             'json' => ['name' => $name, 'ranges' => $ranges ]]);
 
         return redirect()->route('showDhcpPool')->with('success', 'DHCP updated successfully!');
