@@ -120,7 +120,7 @@ class StaticController extends Controller
 
         try{
 
-            $res = $client->put('https://' . session('address') . '/rest/ip/route/'. $id, ['auth' =>  [session('username'), session('password')],
+            $res = $client->patch('https://' . session('address') . '/rest/ip/route/'. $id, ['auth' =>  [session('username'), session('password')],
                             'json' => ['dst-address' => $dst, 'gateway' => $gateway]]);
                             
         } catch( RequestException $e) {
