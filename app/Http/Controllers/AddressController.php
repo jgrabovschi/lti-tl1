@@ -38,7 +38,7 @@ class AddressController extends Controller
         $client = new Client([
             'verify' => false
         ]);
-        $res = $client->get('https://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
+        $res = $client->get('https://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
         
         return view('addresses.createAddress')->with('bridges', json_decode($res->getBody()));
     }
@@ -88,7 +88,7 @@ class AddressController extends Controller
             'verify' => false
         ]);
         $res = $client->get('https://' . session('address') . '/rest/ip/address/' . $id, ['auth' =>  [session('username'), session('password')]]);
-        $resBridge = $client->get('http://' . session('address') . '/rest/interface/bridge', ['auth' =>  [session('username'), session('password')]]);
+        $resBridge = $client->get('http://' . session('address') . '/rest/interface', ['auth' =>  [session('username'), session('password')]]);
         return view('addresses.editAddress')->with('data', json_decode($res->getBody()))->with('id', $id)->with('bridges', json_decode($resBridge->getBody()));
     }
 
